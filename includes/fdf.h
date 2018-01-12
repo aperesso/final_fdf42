@@ -87,6 +87,11 @@ typedef struct		s_loader
 	int				size;
 	struct s_loader	*next;
 }					t_loader;
+typedef struct		s_point
+{
+	int				x;
+	int				y;
+}					t_point;
 void				*error(char *message);
 t_mesh				*load_map(int ac, char **av);
 t_mesh				*process_height(t_mesh *mesh);

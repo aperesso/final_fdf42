@@ -118,9 +118,9 @@ static t_mlx	*display_mesh(t_mlx *mlx)
  	while (++i[0] < mlx->mesh->row)
 	{
 		i[1] = -1;
-		while (++i[1] < c - 1)
+		while (++i[1] < c)
 		{
-			if (visible[i[2]] && visible[i[2]+ 1])
+			if (visible[i[2]] && visible[i[2]+ 1] && i[1] < c - 1)
 				mlx->img = line(mlx->img, set_vector_2d(v[i[2]].x, v[i[2]].y),
 					set_vector_2d(v[i[2] + 1].x, v[i[2] + 1].y),
 					mlx->mesh->color[i[2]]);
@@ -130,11 +130,6 @@ static t_mlx	*display_mesh(t_mlx *mlx)
 					mlx->mesh->color[i[2]]);
 			i[2]++;
 		}
-		if (i[0] < mlx->mesh->row -1 && visible[i[2]] && visible[i[2] + c])
-			mlx->img = line(mlx->img, set_vector_2d(v[i[2]].x, v[i[2]].y),
-				set_vector_2d(v[i[2] + c].x, v[i[2] + c].y),
-				mlx->mesh->color[i[2]]);
-		i[2]++;
 	}
 	return (mlx);
 }
