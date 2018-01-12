@@ -6,7 +6,7 @@
 /*   By: aperesso <aperesso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/15 13:58:29 by aperesso          #+#    #+#             */
-/*   Updated: 2018/01/11 18:10:40 by aperesso         ###   ########.fr       */
+/*   Updated: 2018/01/12 12:21:41 by aperesso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ t_mesh		*transform_mesh(t_camera *cam, t_mesh *mesh)
 
 	model = create_transformation_matrix(mesh->position, mesh->r, mesh->scale);
 	view = create_view_matrix(cam->position, cam->rx, cam->ry, cam->rz);
-	proj = create_projection_matrix(WIDTH / HEIGHT, FOV, NEAR_PLANE, FAR_PLANE);
+	proj = create_projection_matrix((float) WIDTH / HEIGHT, FOV, NEAR_PLANE, FAR_PLANE);
 	i = -1;
 	tmp = mesh->vertices;
 	while (++i < mesh->vertex_count)
@@ -90,32 +90,37 @@ static t_mlx	*display_mesh(t_mlx *mlx)
 	t_vec4	*v;
 	t_vec3	i;
 	int		*visible;
-	int		col;
+	int		c;
 
 	v = mlx->mesh->transformed_vertices;
 	visible = mlx->mesh->is_visible;
 	i = set_vector_3d(-1, -1, 0);
-	col = mlx->mesh->col;
-	while (++i.x < mlx->mesh->row)
+	c = mlx->mesh->col;
+/* 	while (++i.x < mlx->mesh->row)
 	{
 		i.y = -1;
-		while (++i.y < col - 1)
+		while (++i.y < c - 1)
 		{
-			if (visible[i.z] && visible[i.z + 1])
-				mlx->img = line(mlx->img, set_vector_2d(v[i.z].x, v[i.z].y),
-					set_vector_2d(v[i.z + 1].x, v[i.z + 1].y),
-					mlx->mesh->color[i.z]);
-			if (i.x < mlx->mesh->row -1 && visible[i.z] && visible[i.z + col])
-				mlx->img = line(mlx->img, set_vector_2d(v[i.z].x, v[i.z].y),
-					set_vector_2d(v[i.z + c].x, v[i.z + c].y),
-					mlx->mesh->color[i.z]);
+			if (visible[(int)i.z] && visible[(int)i.z + 1])
+				mlx->img = line(mlx->img, set_vector_2d(v[(int)i.z].x, v[(int)i.z].y),
+					set_vector_2d(v[(int)i.z + 1].x, v[(int)i.z + 1].y),
+					mlx->mesh->color[(int)i.z]);
+			if (i.x < mlx->mesh->row -1 && visible[(int)i.z] && visible[(int)i.z + c])
+				mlx->img = line(mlx->img, set_vector_2d(v[(int)i.z].x, v[(int)i.z].y),
+					set_vector_2d(v[(int)i.z + c].x, v[(int)i.z + c].y),
+					mlx->mesh->color[(int)i.z]);
 			i.z++;
 		}
-		if (i.x < mlx->mesh->row -1 && visible[i.z] && visible[i.z + col])
-			mlx->img = line(mlx->img, set_vector_2d(v[i.z].x, v[i.z].y),
-				set_vector_2d(v[i.z + c].x, v[i.z + c].y),
-				mlx->mesh->color[i.z]);
+		if (i.x < mlx->mesh->row -1 && visible[(int)i.z] && visible[(int)i.z + c])
+			mlx->img = line(mlx->img, set_vector_2d(v[(int)i.z].x, v[(int)i.z].y),
+				set_vector_2d(v[(int)i.z + c].x, v[(int)i.z + c].y),
+				mlx->mesh->color[(int)i.z]);
 		i.z++;
+	} */
+	while (++i.x < mlx->mesh->vertex_count)
+	{
+		if (visible[(int)i.x])
+			mlx->img = fill_img_pixel(mlx->img, mlx->mesh->color[(int)i.x], v[(int)i.x].x, v[(int)i.x].y);
 	}
 	return (mlx);
 }

@@ -6,7 +6,7 @@
 /*   By: aperesso <aperesso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/04 23:47:56 by aperesso          #+#    #+#             */
-/*   Updated: 2018/01/10 15:01:44 by aperesso         ###   ########.fr       */
+/*   Updated: 2018/01/12 11:44:46 by aperesso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 static void	update_mesh(t_mlx *mlx)
 {
 	mlx_destroy_image(mlx->ptr, mlx->img->ptr);
-	mlx->img = create_image(mlx);
+	mlx->img = init_img(mlx);
 	clear_color(mlx->img, 0x696969);
 	mlx->mesh = transform_mesh(mlx->camera, mlx->mesh);
 	mlx->mesh = clip_mesh(mlx->mesh);

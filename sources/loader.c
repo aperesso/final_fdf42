@@ -6,7 +6,7 @@
 /*   By: aperesso <aperesso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/04 23:47:56 by aperesso          #+#    #+#             */
-/*   Updated: 2018/01/10 15:01:44 by aperesso         ###   ########.fr       */
+/*   Updated: 2018/01/12 13:17:23 by aperesso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,13 @@ static int	process_data(t_loader **data, char *line)
 ** I will add some points at height 0 to obtain a good looking one
 */
 
-static t_mesh	*get_size(t_loader *data, t_mesh **map)
+static t_mesh	*get_size(t_loader *data, t_mesh *map)
 {
 	t_loader	*current;
 	t_vec2		size;
 	t_mesh		*mesh;
 
-	mesh = *map;
+	mesh = map;
 	current = data;
 	size = set_vector_2d(0, 0);
 	while (current)
@@ -83,7 +83,7 @@ static t_mesh	*get_size(t_loader *data, t_mesh **map)
 		size.x++;
 		if (current->size > size.y)
 			size.y = current->size;
-			current = current->next;
+		current = current->next;
 	}
 	mesh->row = size.x;
 	mesh->col = size.y;
@@ -114,7 +114,7 @@ static t_vec4	*process_vertex(t_loader *data, int row, int col)
 	while (current)
 	{
 		j = -1;
-		while (++j < col)
+		while (++j < col && i < col * row)
 		{
 			vertex[i] = set_vector_4d(j, 0, k, 1);
 			if (j < current->size)
@@ -135,22 +135,27 @@ t_mesh			*load_map(int ac, char **av)
 {
 	int			fd;
 	t_mesh		*map;
-	t_loader	*data = NULL;
+	t_loader	*data;
 	int			i;
 	char		*line;
 
+	data = NULL;
 	if (ac != 2)
 		return ((t_mesh *)error("usage: ./fdf input_file\n"));
 	fd = open(av[1], O_RDONLY);
 	while ((i = get_next_line(fd, &line)) != 0)
+	{
 		if (i == -1 || !(process_data(&data, line)))
 			return ((t_mesh *)error("can not read file\n"));
+		printf("%s\n", line);
+	}
 	close(fd);
 	if (!(map = (t_mesh *)malloc(sizeof(t_mesh))))
 		return ((t_mesh *)error("an error occured\n"));
-	map = get_size(data, &map);
+	map = get_size(data, map);
 	if (!(map->vertex_count = map->col * map->row))
 		return ((t_mesh *)error("It looks like there is nothing to show :(\n"));
+	ft_putnbr(map->vertex_count);
 	if (!(map->vertices = process_vertex(data, map->col, map->row)))
 		return ((t_mesh *)error("an error occured\n"));
 	return (map);

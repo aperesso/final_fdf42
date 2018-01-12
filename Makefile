@@ -6,7 +6,7 @@
 #    By: aperesso <aperesso@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/03 17:13:32 by aperesso          #+#    #+#              #
-#    Updated: 2018/01/11 19:48:59 by aperesso         ###   ########.fr        #
+#    Updated: 2018/01/12 11:39:21 by aperesso         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,9 +19,9 @@ WAC=\033[33m
 
 cc = gcc
 C_FLAGS = -Wall -Wextra -Werror -g
-FRAM = -I /usr/X11/include -g -L /usr/X11/lib -lX11 -lmlx -lXext
+# FRAM = -I /usr/X11/include -g -L /usr/X11/lib -lX11 -lmlx -lXext
 # FRAM = -framework OpenGL -framework AppKit minilibx/libmlx.a
-# FRAM =  -L minilibx -I minilibx -lmlx -framework OpenGL -framework AppKit -g
+FRAM =  -L minilibx -I minilibx -lmlx -framework OpenGL -framework AppKit -g
 
 OBJ_PATH = ./obj/
 LFT_PATH = ./libft/
