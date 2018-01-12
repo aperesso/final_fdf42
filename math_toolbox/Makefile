@@ -46,6 +46,7 @@ SRC_NAME = 	create_matrix.c \
 			set_vector_3d.c\
 			map.c\
 			set_vector_2d.c\
+			printVertices.c\
 
 SRC = $(addprefix $(SRC_PATH),$(SRC_NAME))
 OBJ = $(addprefix $(OBJ_PATH),$(OBJ_NAME))
@@ -54,7 +55,7 @@ INC = $(addprefix -I,$(INC_PATH))
 all: $(NAME)
 
 $(NAME): $(OBJ)
-		@ar rc $(NAME)  $^ $@ 
+		@ar rc $(NAME)  $^ $@
 		@ranlib $(NAME)
 		@echo "\033[1;34mToolbox\t\t\033[1;33mCompilation\t\t\033[0;32m[OK]\033[0m"
 

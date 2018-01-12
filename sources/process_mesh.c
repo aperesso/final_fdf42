@@ -12,6 +12,11 @@
 
 #include "../includes/fdf.h"
 
+/*
+**	For the final calculation of the 2d points that will represent each vertices
+**	we map every single vertex between 0 and 1
+*/
+
 t_mesh	*process_height(t_mesh *m)
 {
 	t_vec4	*height;
@@ -41,6 +46,12 @@ t_mesh	*process_height(t_mesh *m)
 	return (m);
 }
 
+/*
+** 											1st part of rasterization :
+**	We need to multiply model, view and projection matrix all together
+**	The resulting matrix is then applied to every vertice in the model
+*/
+
 t_mesh		*transform_mesh(t_camera *cam, t_mesh *mesh)
 {
 	t_matrix	model;
@@ -51,7 +62,8 @@ t_mesh		*transform_mesh(t_camera *cam, t_mesh *mesh)
 
 	model = create_transformation_matrix(mesh->position, mesh->r, mesh->scale);
 	view = create_view_matrix(cam->position, cam->rx, cam->ry, cam->rz);
-	proj = create_projection_matrix((float) WIDTH / HEIGHT, FOV, NEAR_PLANE, FAR_PLANE);
+	proj = create_projection_matrix((float) WIDTH / HEIGHT, FOV,
+		NEAR_PLANE, FAR_PLANE);
 	i = -1;
 	tmp = mesh->vertices;
 	while (++i < mesh->vertex_count)
@@ -66,6 +78,12 @@ t_mesh		*transform_mesh(t_camera *cam, t_mesh *mesh)
 	mesh->vertices = tmp;
 	return (mesh);
 }
+
+/*
+**													2nde part - rasterization
+**	The coordinates are divided by the fourth vector componant w.
+**  If w == 1 then the vertice is behind the front plane and thus can be seen
+*/
 
 t_mesh		*clip_mesh(t_mesh *m)
 {
@@ -88,42 +106,47 @@ t_mesh		*clip_mesh(t_mesh *m)
 static t_mlx	*display_mesh(t_mlx *mlx)
 {
 	t_vec4	*v;
-	t_vec3	i;
+	int		i[3];
 	int		*visible;
 	int		c;
 
 	v = mlx->mesh->transformed_vertices;
 	visible = mlx->mesh->is_visible;
-	i = set_vector_3d(-1, -1, 0);
+	i[0] = -1;
+	i[2] = 0;
 	c = mlx->mesh->col;
-/* 	while (++i.x < mlx->mesh->row)
+ 	while (++i[0] < mlx->mesh->row)
 	{
-		i.y = -1;
-		while (++i.y < c - 1)
+		i[1] = -1;
+		while (++i[1] < c - 1)
 		{
-			if (visible[(int)i.z] && visible[(int)i.z + 1])
-				mlx->img = line(mlx->img, set_vector_2d(v[(int)i.z].x, v[(int)i.z].y),
-					set_vector_2d(v[(int)i.z + 1].x, v[(int)i.z + 1].y),
-					mlx->mesh->color[(int)i.z]);
-			if (i.x < mlx->mesh->row -1 && visible[(int)i.z] && visible[(int)i.z + c])
-				mlx->img = line(mlx->img, set_vector_2d(v[(int)i.z].x, v[(int)i.z].y),
-					set_vector_2d(v[(int)i.z + c].x, v[(int)i.z + c].y),
-					mlx->mesh->color[(int)i.z]);
-			i.z++;
+			if (visible[i[2]] && visible[i[2]+ 1])
+				mlx->img = line(mlx->img, set_vector_2d(v[i[2]].x, v[i[2]].y),
+					set_vector_2d(v[i[2] + 1].x, v[i[2] + 1].y),
+					mlx->mesh->color[i[2]]);
+			if (i[0] < mlx->mesh->row -1 && visible[i[2]] && visible[i[2] + c])
+				mlx->img = line(mlx->img, set_vector_2d(v[i[2]].x, v[i[2]].y),
+					set_vector_2d(v[i[2] + c].x, v[i[2] + c].y),
+					mlx->mesh->color[i[2]]);
+			i[2]++;
 		}
-		if (i.x < mlx->mesh->row -1 && visible[(int)i.z] && visible[(int)i.z + c])
-			mlx->img = line(mlx->img, set_vector_2d(v[(int)i.z].x, v[(int)i.z].y),
-				set_vector_2d(v[(int)i.z + c].x, v[(int)i.z + c].y),
-				mlx->mesh->color[(int)i.z]);
-		i.z++;
-	} */
-	while (++i.x < mlx->mesh->vertex_count)
-	{
-		if (visible[(int)i.x])
-			mlx->img = fill_img_pixel(mlx->img, mlx->mesh->color[(int)i.x], v[(int)i.x].x, v[(int)i.x].y);
+		if (i[0] < mlx->mesh->row -1 && visible[i[2]] && visible[i[2] + c])
+			mlx->img = line(mlx->img, set_vector_2d(v[i[2]].x, v[i[2]].y),
+				set_vector_2d(v[i[2] + c].x, v[i[2] + c].y),
+				mlx->mesh->color[i[2]]);
+		i[2]++;
 	}
 	return (mlx);
 }
+
+/*
+** Last but not least, the vertices have to been transformed into viewport
+** coordinates if the camera cast them.
+** We know it by checking if w = 1 after clipping plane.
+** If it is and the z componants of the vertices are ranged between -1 and 1
+** after the multiplication of the viewport matrix and the vertices
+** then we can draw it !
+*/
 
 t_mlx		*mesh_to_view(t_mlx *mlx)
 {

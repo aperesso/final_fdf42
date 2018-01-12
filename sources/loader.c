@@ -73,9 +73,7 @@ static t_mesh	*get_size(t_loader *data, t_mesh *map)
 {
 	t_loader	*current;
 	t_vec2		size;
-	t_mesh		*mesh;
 
-	mesh = map;
 	current = data;
 	size = set_vector_2d(0, 0);
 	while (current)
@@ -85,9 +83,9 @@ static t_mesh	*get_size(t_loader *data, t_mesh *map)
 			size.y = current->size;
 		current = current->next;
 	}
-	mesh->row = size.x;
-	mesh->col = size.y;
-	return (mesh);
+	map->row = size.x;
+	map->col = size.y;
+	return (map);
 }
 
 /*
@@ -114,7 +112,7 @@ static t_vec4	*process_vertex(t_loader *data, int row, int col)
 	while (current)
 	{
 		j = -1;
-		while (++j < col && i < col * row)
+		while (++j < col)
 		{
 			vertex[i] = set_vector_4d(j, 0, k, 1);
 			if (j < current->size)
@@ -144,19 +142,15 @@ t_mesh			*load_map(int ac, char **av)
 		return ((t_mesh *)error("usage: ./fdf input_file\n"));
 	fd = open(av[1], O_RDONLY);
 	while ((i = get_next_line(fd, &line)) != 0)
-	{
 		if (i == -1 || !(process_data(&data, line)))
 			return ((t_mesh *)error("can not read file\n"));
-		printf("%s\n", line);
-	}
 	close(fd);
 	if (!(map = (t_mesh *)malloc(sizeof(t_mesh))))
 		return ((t_mesh *)error("an error occured\n"));
 	map = get_size(data, map);
 	if (!(map->vertex_count = map->col * map->row))
 		return ((t_mesh *)error("It looks like there is nothing to show :(\n"));
-	ft_putnbr(map->vertex_count);
-	if (!(map->vertices = process_vertex(data, map->col, map->row)))
+	if (!(map->vertices = process_vertex(data, map->row, map->col)))
 		return ((t_mesh *)error("an error occured\n"));
 	return (map);
 }

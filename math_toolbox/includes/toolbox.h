@@ -75,4 +75,5 @@ t_vec4				set_vector_4d(float x, float y, float z, float w);
 t_vec3				set_vector_3d(float x, float y, float z);
 t_vec2				set_vector_2d(float x, float y);
 float				map(float x, t_vec2 from, t_vec2 to);
+void	printVertices(t_mesh *m);
 #endif

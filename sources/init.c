@@ -26,9 +26,9 @@ static t_mesh	*init_map(int ac, char **av)
 		return (NULL);
 	if (!(map->color = ft_memalloc(sizeof(int) * map->vertex_count)))
 		return (NULL);
-	map->position = set_vector_3d(map->vertices[map->vertex_count - 1].x / 2,
+	map->position = set_vector_3d(-map->vertices[map->vertex_count - 1].x / 2,
 		0, -map->vertices[map->vertex_count - 1].z / 2);
-	map->scale = set_vector_3d(1, 0.001f, 1);
+	map->scale = set_vector_3d(2, 0.001f, 2);
 	map->r = set_vector_3d(0, 0, 0);
 	if (!(map->transformed_vertices =
 			ft_memalloc(sizeof(t_vec4) * map->vertex_count)))
@@ -77,6 +77,13 @@ static t_mlx	*init_mlx(t_camera *camera, t_mesh *mesh)
 	return (mlx);
 }
 
+/*
+**	Before we can cast a 2d drawing of a 3d mesh we need three matrices :
+**  	-> Model			given by the mesh
+**		-> View				given by the camera
+**		-> Position			given how we want do display our mesh
+*/
+
 t_mlx			*init_all(int ac, char **av)
 {
 	t_mesh		*map;
@@ -91,7 +98,7 @@ t_mlx			*init_all(int ac, char **av)
 	map = clip_mesh(map);
 	if (!(mlx = init_mlx(camera, map)))
 		return (NULL);
-	clear_color(mlx->img, 0x696969);
+	clear_color(mlx->img, 0x111111);
 	if (!(mlx->mesh->is_visible =
 		malloc(sizeof(int) * mlx->mesh->vertex_count)))
 	 	return (NULL);
