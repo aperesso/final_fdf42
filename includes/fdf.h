@@ -6,7 +6,7 @@
 /*   By: aperesso <aperesso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/03 16:58:00 by aperesso          #+#    #+#             */
-/*   Updated: 2018/01/13 17:28:37 by aperesso         ###   ########.fr       */
+/*   Updated: 2018/01/13 18:01:59 by aperesso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@
 # define X 7
 # define I 34
 # define O 31
-# define DARK 0x555555
-# define LIGHT 0xd3d3d3
+# define DARK 0x111111
+# define LIGHT 0x555555
 # define SCROLL_UP 5
 # define SCROLL_DOWN 4
 
