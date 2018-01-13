@@ -6,7 +6,7 @@
 /*   By: aperesso <aperesso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/04 23:47:56 by aperesso          #+#    #+#             */
-/*   Updated: 2018/01/12 13:17:23 by aperesso         ###   ########.fr       */
+/*   Updated: 2018/01/13 15:48:04 by aperesso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,14 @@ static t_loader	*parse_data(char *line)
 	while (++i < new->size)
 		new->data[i] = ft_atoi(split[i]);
 	new->next = NULL;
-	return(new);
+	return (new);
 }
 
 /*
 ** The datas are then parsed into a linked list called 'loader'
 */
 
-static int	process_data(t_loader **data, char *line)
+static int		process_data(t_loader **data, char *line)
 {
 	t_loader	*new;
 	t_loader	*current;

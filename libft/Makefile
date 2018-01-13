@@ -6,7 +6,7 @@
 #    By: aperesso <aperesso@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/13 19:12:18 by alexia            #+#    #+#              #
-#    Updated: 2017/04/17 19:15:22 by aperesso         ###   ########.fr        #
+#    Updated: 2018/01/13 17:49:35 by aperesso         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -88,7 +88,8 @@ $(NAME):
 	@ranlib $(NAME)
 	@echo "\033[1;34mLibft\t\t\033[1;33mCompilation\t\t\033[0;32m[OK]\033[0m"
 
-all: $(NAME)
+all:
+	@make $(NAME)
 
 clean:
 	@rm -rf $(OBJECT)

@@ -6,7 +6,7 @@
 /*   By: aperesso <aperesso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/15 13:58:29 by aperesso          #+#    #+#             */
-/*   Updated: 2018/01/12 12:21:41 by aperesso         ###   ########.fr       */
+/*   Updated: 2018/01/13 17:51:51 by aperesso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 **	we map every single vertex between 0 and 1
 */
 
-t_mesh	*process_height(t_mesh *m)
+t_mesh			*process_height(t_mesh *m)
 {
 	t_vec4	*height;
 	t_vec2	range;
@@ -52,7 +52,7 @@ t_mesh	*process_height(t_mesh *m)
 **	The resulting matrix is then applied to every vertice in the model
 */
 
-t_mesh		*transform_mesh(t_camera *cam, t_mesh *mesh)
+t_mesh			*transform_mesh(t_camera *cam, t_mesh *mesh)
 {
 	t_matrix	model;
 	t_matrix	view;
@@ -62,7 +62,7 @@ t_mesh		*transform_mesh(t_camera *cam, t_mesh *mesh)
 
 	model = create_transformation_matrix(mesh->position, mesh->r, mesh->scale);
 	view = create_view_matrix(cam->position, cam->rx, cam->ry, cam->rz);
-	proj = create_projection_matrix((float) WIDTH / HEIGHT, FOV,
+	proj = create_projection_matrix((float)(WIDTH / HEIGHT), FOV,
 		NEAR_PLANE, FAR_PLANE);
 	i = -1;
 	tmp = mesh->vertices;
@@ -85,7 +85,7 @@ t_mesh		*transform_mesh(t_camera *cam, t_mesh *mesh)
 **  If w == 1 then the vertice is behind the front plane and thus can be seen
 */
 
-t_mesh		*clip_mesh(t_mesh *m)
+t_mesh			*clip_mesh(t_mesh *m)
 {
 	t_mesh	*mesh;
 	int		i;
@@ -103,28 +103,26 @@ t_mesh		*clip_mesh(t_mesh *m)
 	return (mesh);
 }
 
-static t_mlx	*display_mesh(t_mlx *mlx)
+static t_mlx	*display_mesh(t_mlx *mlx, int c)
 {
 	t_vec4	*v;
 	int		i[3];
 	int		*visible;
-	int		c;
 
 	v = mlx->mesh->transformed_vertices;
 	visible = mlx->mesh->is_visible;
 	i[0] = -1;
 	i[2] = 0;
-	c = mlx->mesh->col;
- 	while (++i[0] < mlx->mesh->row)
+	while (++i[0] < mlx->mesh->row)
 	{
 		i[1] = -1;
 		while (++i[1] < c)
 		{
-			if (visible[i[2]] && visible[i[2]+ 1] && i[1] < c - 1)
+			if (visible[i[2]] && visible[i[2] + 1] && i[1] < c - 1)
 				mlx->img = line(mlx->img, set_vector_2d(v[i[2]].x, v[i[2]].y),
 					set_vector_2d(v[i[2] + 1].x, v[i[2] + 1].y),
 					mlx->mesh->color[i[2]]);
-			if (i[0] < mlx->mesh->row -1 && visible[i[2]] && visible[i[2] + c])
+			if (i[0] < mlx->mesh->row - 1 && visible[i[2]] && visible[i[2] + c])
 				mlx->img = line(mlx->img, set_vector_2d(v[i[2]].x, v[i[2]].y),
 					set_vector_2d(v[i[2] + c].x, v[i[2] + c].y),
 					mlx->mesh->color[i[2]]);
@@ -143,7 +141,7 @@ static t_mlx	*display_mesh(t_mlx *mlx)
 ** then we can draw it !
 */
 
-t_mlx		*mesh_to_view(t_mlx *mlx)
+t_mlx			*mesh_to_view(t_mlx *mlx)
 {
 	t_mesh		*mesh;
 	t_vec4		*vertices;
@@ -166,5 +164,5 @@ t_mlx		*mesh_to_view(t_mlx *mlx)
 				mesh->is_visible[v] = 1;
 		}
 	}
-	return (display_mesh(mlx));
+	return (display_mesh(mlx, mlx->mesh->col));
 }

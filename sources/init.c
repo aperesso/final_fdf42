@@ -6,7 +6,7 @@
 /*   By: aperesso <aperesso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/15 13:46:54 by aperesso          #+#    #+#             */
-/*   Updated: 2018/01/10 14:47:28 by aperesso         ###   ########.fr       */
+/*   Updated: 2018/01/13 17:52:45 by aperesso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static t_mesh	*init_map(int ac, char **av)
 		return (NULL);
 	map->position = set_vector_3d(-map->vertices[map->vertex_count - 1].x / 2,
 		0, -map->vertices[map->vertex_count - 1].z / 2);
-	map->scale = set_vector_3d(2, 0.001f, 2);
+	map->scale = set_vector_3d(1, 0.001f, 1);
 	map->r = set_vector_3d(0, 0, 0);
 	if (!(map->transformed_vertices =
 			ft_memalloc(sizeof(t_vec4) * map->vertex_count)))
@@ -68,6 +68,7 @@ static t_mlx	*init_mlx(t_camera *camera, t_mesh *mesh)
 		return (NULL);
 	mlx->mesh = mesh;
 	mlx->camera = camera;
+	mlx->background = DARK;
 	if (!(mlx->ptr = mlx_init()))
 		return (NULL);
 	if (!(mlx->img = init_img(mlx)))
@@ -90,7 +91,7 @@ t_mlx			*init_all(int ac, char **av)
 	t_mlx		*mlx;
 	t_camera	*camera;
 
-	if (!(camera = init_camera(set_vector_3d(0, 40, 60),
+	if (!(camera = init_camera(set_vector_3d(0, 50, 100),
 		set_vector_3d(0, 0, 0))) || !(map = init_map(ac, av)))
 		return (NULL);
 	map = process_height(map);
@@ -98,10 +99,10 @@ t_mlx			*init_all(int ac, char **av)
 	map = clip_mesh(map);
 	if (!(mlx = init_mlx(camera, map)))
 		return (NULL);
-	clear_color(mlx->img, 0x111111);
+	clear_color(mlx->img, mlx->background);
 	if (!(mlx->mesh->is_visible =
 		malloc(sizeof(int) * mlx->mesh->vertex_count)))
-	 	return (NULL);
+		return (NULL);
 	mlx = mesh_to_view(mlx);
 	return (mlx);
 }

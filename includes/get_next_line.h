@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aperesso <aperesso@student.fr>             +#+  +:+       +#+        */
+/*   By: aperesso <aperesso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/16 20:16:55 by aperesso          #+#    #+#             */
-/*   Updated: 2017/12/03 17:08:17 by aperesso         ###   ########.fr       */
+/*   Updated: 2018/01/13 15:39:17 by aperesso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 # define GNL_ERROR -1
 # define GNL_SUCCESS 1
 # define GNL_END 0
-# define BUFF_SIZE 1000
+# define BUFF_SIZE 8
 
 # include "../libft/libft.h"
 # include <stdio.h>
@@ -25,6 +25,12 @@
 # include <fcntl.h>
 # include <unistd.h>
 
-int		get_next_line(const int fd, char **line);
+typedef struct	s_fd
+{
+	char		*line;
+	int			fd;
+	struct s_fd	*next;
+}				t_fd;
+int				get_next_line(int const fd, char **line);
 
 #endif

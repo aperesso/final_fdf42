@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strsplit.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aperesso <aperesso@student.fr>             +#+  +:+       +#+        */
+/*   By: aperesso <aperesso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/15 04:25:33 by alexia            #+#    #+#             */
-/*   Updated: 2017/12/15 00:57:26 by aperesso         ###   ########.fr       */
+/*   Updated: 2018/01/13 16:01:20 by aperesso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include <stdlib.h>
 #include "libft.h"

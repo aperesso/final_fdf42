@@ -3,68 +3,109 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aperesso <aperesso@student.fr>             +#+  +:+       +#+        */
+/*   By: aperesso <aperesso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/16 20:12:05 by aperesso          #+#    #+#             */
-/*   Updated: 2017/12/03 17:11:27 by aperesso         ###   ########.fr       */
+/*   Updated: 2018/01/13 15:40:04 by aperesso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/get_next_line.h"
+#include <unistd.h>
 
-static	int	read_line(int const fd, char *tab[fd])
+static t_fd	*get_current_fd(t_fd **head, int fd)
+{
+	t_fd	*current;
+	t_fd	*new;
+
+	if (*head)
+	{
+		current = *head;
+		while (current)
+		{
+			if (current->fd == fd)
+				return (current);
+			current = current->next;
+		}
+	}
+	if (!(new = (t_fd *)malloc(sizeof(t_fd))))
+		return (NULL);
+	new->fd = fd;
+	new->line = ft_strnew(BUFF_SIZE);
+	new->next = NULL;
+	if (!*head)
+		return ((*head = new));
+	new->next = *head;
+	*head = new;
+	return (*head);
+}
+
+static int	read_line(t_fd **current)
 {
 	int		rd;
 	char	buffer[BUFF_SIZE + 1];
 	char	*tmp;
+	t_fd	*cur;
 
-	while ((rd = read(fd, buffer, BUFF_SIZE)) > 0)
+	cur = *current;
+	buffer[BUFF_SIZE] = 0;
+	while ((rd = read(cur->fd, buffer, BUFF_SIZE)) > 0)
 	{
 		buffer[rd] = '\0';
-		tmp = tab[fd];
-		tab[fd] = ft_strjoin(tmp, buffer);
+		tmp = cur->line;
+		cur->line = ft_strjoin(tmp, buffer);
 		free(tmp);
-		if (!tab[fd])
+		if (!cur->line)
 			return (GNL_ERROR);
-		if (ft_strchr(tab[fd], '\n'))
-			break;
+		if (ft_strchr(cur->line, '\n'))
+			break ;
 	}
+	*current = cur;
 	return (rd);
 }
 
-static	int	process_line(int const fd, char *tab[fd], char **line)
+static int	process_line(t_fd **current, char **line)
 {
 	int		n;
 	char	*tmp;
+	t_fd	*cur;
 
 	n = -1;
-	while (tab[fd][++n])
-	{
-		if (tab[fd][n] == '\n')
-			break;
-	}
-	*line = ft_strsub(tab[fd], 0, n);
-	if (!(tmp = (char *)malloc(sizeof(tmp) * (ft_strlen(tab[fd]) + 1))))
+	cur = *current;
+	while (cur->line[++n])
+		if (cur->line[n] == '\n')
+			break ;
+	*line = ft_strsub(cur->line, 0, n);
+	if (!(tmp = ft_strnew(ft_strlen(cur->line + n + 1))))
 		return (GNL_ERROR);
-	ft_strcpy(tmp, &tab[fd][n + 1]);
-	ft_strclr(tab[fd]);
-	ft_strcpy(tab[fd], tmp);
+	if (n == (int)ft_strlen(cur->line))
+	{
+		ft_strdel(&cur->line);
+		cur->line = ft_strnew(1);
+		return (GNL_SUCCESS);
+	}
+	ft_strcpy(tmp, cur->line + n + 1);
+	ft_strclr(cur->line);
+	ft_strcpy(cur->line, tmp);
 	free(tmp);
+	*current = cur;
 	return (GNL_SUCCESS);
 }
 
 int			get_next_line(int const fd, char **line)
 {
-	static	char	*tab[256];
+	static t_fd		*top = NULL;
+	t_fd			*current;
 
-	if (fd < 0 || !line || fd > 256 ||
-	 	(!tab[fd] && (!(tab[fd] = ft_strnew(BUFF_SIZE)))) 
-		 || read_line(fd, &(*tab)) < 0 )
+	if (fd < 0 || !line || BUFF_SIZE < 1 ||
+		!(current = get_current_fd(&top, fd)) || !current->line)
 		return (GNL_ERROR);
-	if (tab[fd][0] == '\0')
+	if (read_line(&current) < 0)
+		return (GNL_ERROR);
+	if (current->line[0] == '\0')
 	{
 		*line = NULL;
 		return (GNL_END);
 	}
-	return (process_line(fd, tab, line) < 0) ? GNL_ERROR : GNL_SUCCESS;
+	return ((process_line(&current, line) < 0) ? GNL_ERROR : GNL_SUCCESS);
 }

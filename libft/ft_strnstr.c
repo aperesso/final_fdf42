@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexia <alexia@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aperesso <aperesso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 18:09:52 by aperesso          #+#    #+#             */
-/*   Updated: 2017/04/18 21:55:31 by alexia           ###   ########.fr       */
+/*   Updated: 2018/01/13 16:01:37 by aperesso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,5 @@ char	*ft_strnstr(const char *beggin, const char *little, size_t len)
 		beggin++;
 		len--;
 	}
-	return(NULL);
+	return (NULL);
 }
