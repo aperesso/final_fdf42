@@ -6,7 +6,7 @@
 /*   By: aperesso <aperesso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/11 14:52:26 by alexia            #+#    #+#             */
-/*   Updated: 2017/04/17 19:14:22 by aperesso         ###   ########.fr       */
+/*   Updated: 2018/01/16 13:20:32 by aperesso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ typedef	struct		s_list
 	size_t			content_size;
 	struct s_list	*next;
 }					t_list;
+int					ft_memchri(const void *s, int c, size_t n);
+int					ft_strchri(const char *s, int c);
 void				ft_bzero(void *s, int n);
 void				*ft_memccpy(void *dest, const void *src, int c, size_t n);
 void				*ft_memcpy(void *dest, const void *src, size_t n);

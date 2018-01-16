@@ -5,107 +5,95 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aperesso <aperesso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/05/16 20:12:05 by aperesso          #+#    #+#             */
-/*   Updated: 2018/01/13 15:40:04 by aperesso         ###   ########.fr       */
+/*   Created: 2016/12/22 01:36:11 by fel-mazo          #+#    #+#             */
+/*   Updated: 2018/01/16 13:25:00 by aperesso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/get_next_line.h"
-#include <unistd.h>
+#include <stdio.h>
 
-static t_fd	*get_current_fd(t_fd **head, int fd)
+static t_gnl	*new(int fd)
 {
-	t_fd	*current;
-	t_fd	*new;
+	t_gnl	*ret;
 
-	if (*head)
-	{
-		current = *head;
-		while (current)
-		{
-			if (current->fd == fd)
-				return (current);
-			current = current->next;
-		}
-	}
-	if (!(new = (t_fd *)malloc(sizeof(t_fd))))
-		return (NULL);
-	new->fd = fd;
-	new->line = ft_strnew(BUFF_SIZE);
-	new->next = NULL;
-	if (!*head)
-		return ((*head = new));
-	new->next = *head;
-	*head = new;
-	return (*head);
+	ret = (t_gnl *)ft_memalloc(sizeof(t_gnl));
+	ret->fd = fd;
+	ret->keep = ft_strnew(0);
+	ret->next = NULL;
+	return (ret);
 }
 
-static int	read_line(t_fd **current)
+static t_gnl	*get(t_gnl *head, int fd)
 {
-	int		rd;
-	char	buffer[BUFF_SIZE + 1];
-	char	*tmp;
-	t_fd	*cur;
+	t_gnl	*tmp;
 
-	cur = *current;
-	buffer[BUFF_SIZE] = 0;
-	while ((rd = read(cur->fd, buffer, BUFF_SIZE)) > 0)
+	tmp = head;
+	while (tmp)
 	{
-		buffer[rd] = '\0';
-		tmp = cur->line;
-		cur->line = ft_strjoin(tmp, buffer);
-		free(tmp);
-		if (!cur->line)
-			return (GNL_ERROR);
-		if (ft_strchr(cur->line, '\n'))
-			break ;
+		if (tmp->fd == fd)
+			return (tmp);
+		head = tmp;
+		tmp = tmp->next;
 	}
-	*current = cur;
-	return (rd);
+	head->next = new(fd);
+	return (head->next);
 }
 
-static int	process_line(t_fd **current, char **line)
+static int		more(t_gnl *f, char *buff)
 {
-	int		n;
+	size_t	len1;
+	size_t	len2;
 	char	*tmp;
-	t_fd	*cur;
 
-	n = -1;
-	cur = *current;
-	while (cur->line[++n])
-		if (cur->line[n] == '\n')
-			break ;
-	*line = ft_strsub(cur->line, 0, n);
-	if (!(tmp = ft_strnew(ft_strlen(cur->line + n + 1))))
-		return (GNL_ERROR);
-	if (n == (int)ft_strlen(cur->line))
-	{
-		ft_strdel(&cur->line);
-		cur->line = ft_strnew(1);
-		return (GNL_SUCCESS);
-	}
-	ft_strcpy(tmp, cur->line + n + 1);
-	ft_strclr(cur->line);
-	ft_strcpy(cur->line, tmp);
+	len1 = ft_strlen(f->keep);
+	len2 = ft_strlen(buff);
+	tmp = f->keep;
+	f->keep = ft_strjoin(tmp, buff);
 	free(tmp);
-	*current = cur;
-	return (GNL_SUCCESS);
+	return (ft_strchri(f->keep, '\n'));
 }
 
-int			get_next_line(int const fd, char **line)
+static void		less(t_gnl *f)
 {
-	static t_fd		*top = NULL;
-	t_fd			*current;
+	char	*tmp;
+	size_t	len;
+	int		here;
 
-	if (fd < 0 || !line || BUFF_SIZE < 1 ||
-		!(current = get_current_fd(&top, fd)) || !current->line)
-		return (GNL_ERROR);
-	if (read_line(&current) < 0)
-		return (GNL_ERROR);
-	if (current->line[0] == '\0')
+	tmp = f->keep;
+	len = ft_strlen(f->keep);
+	here = ft_strchri(f->keep, '\n');
+	if (here >= 0)
+		f->keep = ft_strsub(tmp, here, len);
+	else
+		f->keep = ft_strnew(0);
+	free(tmp);
+}
+
+int				get_next_line(const int fd, char **line)
+{
+	int				r[3];
+	char			buff[BUFF_SIZE + 1];
+	int				here;
+	static t_gnl	*head = NULL;
+	t_gnl			*f;
+
+	r[1] = 0;
+	r[0] = 1;
+	if (fd < 0 || !line)
+		return (-1);
+	head = (head == NULL) ? new(fd) : head;
+	f = get(head, fd);
+	r[2] = ft_strlen(f->keep);
+	here = more(f, "\0");
+	while (here < 0 && r[0] > 0)
 	{
-		*line = NULL;
-		return (GNL_END);
+		r[0] = read(f->fd, buff, BUFF_SIZE);
+		r[1] += r[0];
+		buff[r[0]] = '\0';
+		here = more(f, buff);
 	}
-	return ((process_line(&current, line) < 0) ? GNL_ERROR : GNL_SUCCESS);
+	*line = ft_strsub(f->keep, 0, here < 0 ? ft_strlen(f->keep) : here - 1);
+	less(f);
+	return (r[0] < 0 ? -1 : r[1] || r[2]);
 }

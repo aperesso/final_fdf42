@@ -5,32 +5,30 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aperesso <aperesso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/05/16 20:16:55 by aperesso          #+#    #+#             */
-/*   Updated: 2018/01/13 15:39:17 by aperesso         ###   ########.fr       */
+/*   Created: 2016/12/22 00:50:17 by fel-mazo          #+#    #+#             */
+/*   Updated: 2018/01/16 13:17:33 by aperesso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
-# define GNL_ERROR -1
-# define GNL_SUCCESS 1
-# define GNL_END 0
-# define BUFF_SIZE 8
 
 # include "../libft/libft.h"
-# include <stdio.h>
-# include <stdlib.h>
 # include <sys/types.h>
-# include <sys/stat.h>
-# include <fcntl.h>
+# include <sys/uio.h>
 # include <unistd.h>
+# include <stdlib.h>
+# include <fcntl.h>
 
-typedef struct	s_fd
+# define BUFF_SIZE 254
+
+typedef struct		s_gnl
 {
-	char		*line;
-	int			fd;
-	struct s_fd	*next;
-}				t_fd;
-int				get_next_line(int const fd, char **line);
+	char			*keep;
+	int				fd;
+	struct s_gnl	*next;
+}					t_gnl;
+
+int					get_next_line(const int fd, char **line);
 
 #endif

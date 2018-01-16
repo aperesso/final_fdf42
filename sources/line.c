@@ -6,7 +6,7 @@
 /*   By: aperesso <aperesso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/15 13:46:54 by aperesso          #+#    #+#             */
-/*   Updated: 2018/01/13 15:46:24 by aperesso         ###   ########.fr       */
+/*   Updated: 2018/01/16 12:04:11 by aperesso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,5 +97,7 @@ t_img			*line(t_img *img, t_vec2 a, t_vec2 b, int color)
 		img = x_over_y(img, line_tools, color);
 	else
 		img = y_over_x(img, line_tools, color);
+	free(line_tools);
+	line_tools = NULL;
 	return (img);
 }

@@ -6,7 +6,7 @@
 /*   By: aperesso <aperesso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/04 23:47:56 by aperesso          #+#    #+#             */
-/*   Updated: 2018/01/13 15:48:04 by aperesso         ###   ########.fr       */
+/*   Updated: 2018/01/16 13:23:44 by aperesso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,13 @@ static t_loader	*parse_data(char *line)
 		return (0);
 	i = -1;
 	while (++i < new->size)
+	{
 		new->data[i] = ft_atoi(split[i]);
+		free(split[i]);
+		split[i] = NULL;
+	}
+	free(split);
+	split = NULL;
 	new->next = NULL;
 	return (new);
 }
@@ -60,6 +66,9 @@ static int		process_data(t_loader **data, char *line)
 			current = current->next;
 		current->next = new;
 	}
+	free(line);
+	(void)data;
+
 	return (1);
 }
 
@@ -144,6 +153,7 @@ t_mesh			*load_map(int ac, char **av)
 	while ((i = get_next_line(fd, &line)) != 0)
 		if (i == -1 || !(process_data(&data, line)))
 			return ((t_mesh *)error("can not read file\n"));
+	free(line);
 	close(fd);
 	if (!(map = (t_mesh *)malloc(sizeof(t_mesh))))
 		return ((t_mesh *)error("an error occured\n"));
@@ -152,5 +162,6 @@ t_mesh			*load_map(int ac, char **av)
 		return ((t_mesh *)error("It looks like there is nothing to show :(\n"));
 	if (!(map->vertices = process_vertex(data, map->row, map->col)))
 		return ((t_mesh *)error("an error occured\n"));
+	flush_loader(data);
 	return (map);
 }

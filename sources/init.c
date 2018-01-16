@@ -6,7 +6,7 @@
 /*   By: aperesso <aperesso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/15 13:46:54 by aperesso          #+#    #+#             */
-/*   Updated: 2018/01/13 18:01:33 by aperesso         ###   ########.fr       */
+/*   Updated: 2018/01/16 12:09:54 by aperesso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ t_mlx			*init_all(int ac, char **av)
 	t_mlx		*mlx;
 	t_camera	*camera;
 
+	map = NULL;
 	if (!(camera = init_camera(set_vector_3d(0, 50, 100),
 		set_vector_3d(0, 0, 0))) || !(map = init_map(ac, av)))
 		return (NULL);

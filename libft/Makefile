@@ -6,7 +6,7 @@
 #    By: aperesso <aperesso@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/13 19:12:18 by alexia            #+#    #+#              #
-#    Updated: 2018/01/13 17:49:35 by aperesso         ###   ########.fr        #
+#    Updated: 2018/01/16 13:20:46 by aperesso         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -75,6 +75,8 @@ SOURCES = ft_bzero.c\
 		  ft_putchar_fd.c\
 		  ft_putstr_fd.c\
 		  ft_putendl_fd.c\
+		  ft_strchri.c\
+		  ft_memchri.c
 
 
 

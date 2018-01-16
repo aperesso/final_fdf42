@@ -6,7 +6,7 @@
 #    By: aperesso <aperesso@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/03 17:13:32 by aperesso          #+#    #+#              #
-#    Updated: 2018/01/13 17:47:24 by aperesso         ###   ########.fr        #
+#    Updated: 2018/01/16 11:47:29 by aperesso         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,10 +33,10 @@ INC_NAME = fdf.h
 SRC_NAME = 	main.c\
 			get_next_line.c\
 			init.c\
-			error.c\
-			loader.c\
-			process_mesh.c\
 			image.c\
+			loader.c\
+			error.c\
+			process_mesh.c\
 			line.c\
 			hook.c\
 

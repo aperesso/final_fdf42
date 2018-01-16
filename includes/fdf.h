@@ -6,7 +6,7 @@
 /*   By: aperesso <aperesso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/03 16:58:00 by aperesso          #+#    #+#             */
-/*   Updated: 2018/01/13 18:01:59 by aperesso         ###   ########.fr       */
+/*   Updated: 2018/01/16 12:08:42 by aperesso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,4 +92,5 @@ int					expose_hook(t_mlx *mlx);
 int					key_hook(int keycode, t_mlx *mlx);
 int					mouse_hook(int button, int x, int y, t_mlx *mlx);
 t_img				*line(t_img *img, t_vec2 a, t_vec2 b, int color);
+void				flush_loader(t_loader *loader);
 #endif
