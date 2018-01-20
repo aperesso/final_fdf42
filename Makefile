@@ -20,8 +20,8 @@ WAC=\033[33m
 cc = gcc
 C_FLAGS = -Wall -Wextra -Werror -g
 
-FRAM =  -I minilibx -lmlx -framework OpenGL -framework AppKit -g
-
+#FRAM =  -I minilibx -lmlx -framework OpenGL -framework AppKit -g
+FRAM = -I /usr/X11/include -g -L /usr/X11/lib -lX11 -lmlx -lXext
 OBJ_PATH = ./obj/
 LFT_PATH = ./libft/
 TOOL_PATH = ./math_toolbox/

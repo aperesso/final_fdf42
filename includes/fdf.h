@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aperesso <aperesso@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aperesso <aperesso@student.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/03 16:58:00 by aperesso          #+#    #+#             */
-/*   Updated: 2018/01/16 12:08:42 by aperesso         ###   ########.fr       */
+/*   Updated: 2018/01/19 14:49:18 by aperesso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,35 @@
 # define FDF_H
 # define _USE_MATH_DEFINES
 # define FOV 60
-# define WIDTH 1800
-# define HEIGHT 1200
+# define WIDTH 1000
+# define HEIGHT 700
 # define FAR_PLANE 10.0f
 # define NEAR_PLANE 10000
-# define ESC 53
-# define UP 126
-# define DOWN 125
-# define LEFT 123
-# define RIGHT 124
-# define A 0
-# define D 2
-# define Y 16
-# define U 32
-# define W 13
-# define X 7
-# define I 34
-# define O 31
+// # define ESC 53
+// # define UP 126
+// # define DOWN 125
+// # define LEFT 123
+// # define RIGHT 124
+// # define A 0
+// # define D 2
+// # define Y 16
+// # define U 32
+// # define W 13
+// # define X 7
+// # define I 34
+// # define O 31
+
+# define ESC 65307
+# define UP 65362
+# define DOWN 65364
+# define LEFT 65361
+# define RIGHT 65363
+# define Q 113
+# define D 100
+# define Z 122
+# define X 120
+# define I 105
+# define O 111
 # define DARK 0x111111
 # define LIGHT 0x555555
 # define SCROLL_UP 5

@@ -18,8 +18,8 @@ int			main(int ac, char **av)
 
 	if (!(mlx = init_all(ac, av)))
 		return (EXIT_FAILURE);
-	mlx_key_hook(mlx->win, key_hook, mlx);
-	mlx_mouse_hook(mlx->win, mouse_hook, mlx);
+	mlx_hook(mlx->win, 2, 3, key_hook, mlx);
+	mlx_hook(mlx->win, 4, (1L << 2), mouse_hook, mlx);
 	mlx_expose_hook(mlx->win, expose_hook, mlx);
 	mlx_loop(mlx->ptr);
 	return (EXIT_SUCCESS);
